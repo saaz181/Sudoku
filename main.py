@@ -1,4 +1,4 @@
-from screen import *
+from solver import *
 
 
 class Cage:
@@ -35,7 +35,7 @@ def get_cages_input():
     return cages
 
 
-def run(Scr, cages):
+def run(Scr):
     # Main loop
     running = True
     # Initialize Pygame
@@ -50,17 +50,20 @@ def run(Scr, cages):
                 running = False
 
         screen.fill(WHITE)
-        Scr.draw_grid(screen, cages)
+        Scr.draw_grid(screen)
         Scr.draw_numbers(screen)
+        solve(Scr)
         pygame.display.flip()
+
 
     pygame.quit()
 
 
-Scr = Screen()
-cage1 = Cage([11, 12, 22], 8)
-cage2 = Cage([45, 46, 56, 57, 58], 22)
+
+cage1 = Cage([11, 21, 22], 14)
+cage2 = Cage([91, 92, 93], 14)
 cage_lists = [cage1, cage2]
+Scr = Screen(cage_lists)
 Scr.set_sudoku([[6, 0, 9, 0, 0, 7, 0, 3, 0],
                 [0, 0, 0, 0, 9, 0, 0, 0, 6],
                 [0, 2, 0, 0, 0, 3, 9, 4, 0],
@@ -70,4 +73,4 @@ Scr.set_sudoku([[6, 0, 9, 0, 0, 7, 0, 3, 0],
                 [0, 0, 2, 0, 0, 0, 0, 1, 4],
                 [3, 0, 4, 6, 5, 0, 8, 0, 0],
                 [1, 0, 5, 0, 0, 9, 0, 0, 0]])
-run(Scr, cage_lists)
+run(Scr)

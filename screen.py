@@ -13,19 +13,20 @@ HEIGHT = 50
 
 
 class Screen:
-    def __init__(self):
+    def __init__(self, cage_list):
         # Set the size of the screen
         self.size = (WIDTH * 9, HEIGHT * 9)
         # Create a 2D array to represent the Sudoku grid
         self.sudoku_grid = [[0 for _ in range(9)] for _ in range(9)]
+        self.cages = cage_list
 
     # Create a 2D array to represent the Sudoku grid
     def set_sudoku(self, array):
         self.sudoku_grid = array
 
     # Function to draw the Sudoku grid
-    def draw_grid(self, screen, cages):
-        self.draw_cages(screen, cages)
+    def draw_grid(self, screen):
+        self.draw_cages(screen)
         for i in range(10):
             if i % 3 == 0:
                 pygame.draw.line(screen, BLACK, (0, i * HEIGHT), (WIDTH * 9, i * HEIGHT), 2)
@@ -36,22 +37,22 @@ class Screen:
 
     # Function to draw the numbers in the Sudoku grid
     def draw_numbers(self, screen):
+        print(self.sudoku_grid)
         # Initialize the Pygame font module
         pygame.font.init()
         font = pygame.font.SysFont('BELL.TTF', 36)
         for i in range(9):
             for j in range(9):
-                print(i)
                 if self.sudoku_grid[i][j] != 0:
                     text = font.render(str(self.sudoku_grid[i][j]), True, BLACK)
                     screen.blit(text, (j * WIDTH + 15, i * HEIGHT + 15))
 
     # Function to draw cages with borders
-    def draw_cages(self, screen, cage_lists):
+    def draw_cages(self, screen):
         # Initialize the Pygame font module
         pygame.font.init()
         font = pygame.font.SysFont('BELL.TTF', 20, italic=True)
-        for cage in cage_lists:
+        for cage in self.cages:
             # Convert cell codes to row and column for easier handling
             cells = [((cell // 10) - 1, (cell % 10) - 1) for cell in cage.cells]
             # Find the top-right cell in the cage

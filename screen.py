@@ -34,10 +34,10 @@ class Screen:
             else:
                 pygame.draw.line(screen, GRAY, (0, i * HEIGHT), (WIDTH * 9, i * HEIGHT))
                 pygame.draw.line(screen, GRAY, (i * WIDTH, 0), (i * WIDTH, HEIGHT * 9))
+        self.draw_numbers(screen)
 
     # Function to draw the numbers in the Sudoku grid
     def draw_numbers(self, screen):
-        print(self.sudoku_grid)
         # Initialize the Pygame font module
         pygame.font.init()
         font = pygame.font.SysFont('BELL.TTF', 36)
@@ -74,13 +74,13 @@ class Screen:
                 # Draw the border for each necessary side
                 for border in borders:
                     if border == 'top':
-                        self.draw_dashed_line(screen, cage.color, (x, y), (x + WIDTH, y), 5)
+                        self.draw_dashed_line(screen, cage.color, (x, y+2), (x + WIDTH, y+2), 3)
                     elif border == 'bottom':
-                        self.draw_dashed_line(screen, cage.color, (x, y + HEIGHT), (x + WIDTH, y + HEIGHT), 5)
+                        self.draw_dashed_line(screen, cage.color, (x, y + HEIGHT-2), (x + WIDTH, y + HEIGHT-2), 3)
                     elif border == 'left':
-                        self.draw_dashed_line(screen, cage.color, (x, y), (x, y + HEIGHT), 5)
+                        self.draw_dashed_line(screen, cage.color, (x+2, y), (x+2, y + HEIGHT), 3)
                     elif border == 'right':
-                        self.draw_dashed_line(screen, cage.color, (x + WIDTH, y), (x + WIDTH, y + HEIGHT), 5)
+                        self.draw_dashed_line(screen, cage.color, (x-2 + WIDTH, y), (x-2 + WIDTH, y + HEIGHT), 3)
 
                 # If the cell is the top-right cell, draw the cage value
                 if (row, col) == top_right_cell:

@@ -28,14 +28,16 @@ def solve(Scr: Screen, show):
         if forward_check(Scr, row, col) and solve(Scr, show):
             return True  # If successful, propagate the success back up
         Scr.sudoku_grid[row][col] = 0  # Revert the change on failure
-
+        show.fill(WHITE)
+        Scr.draw_grid(show)
+        pygame.display.update()
         # Handle Pygame events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
-        Scr.draw_grid(show)
+
 
     return False  # If no number is valid, backtrack
 

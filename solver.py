@@ -1,21 +1,43 @@
 import copy
-
+import pygame
 from screen import *
 
 
 def solve(Scr: Screen, show):
-    for row in range(9):
-        for col in range(9):
-            if Scr.sudoku_grid[row][col] == 0:
-                for num in range(1, 10):
-                    if is_valid(num, row, col, Scr):
-                        Scr.sudoku_grid[row][col] = num  # Make the change
-                        if forward_check(Scr, row, col) and solve(Scr, show):
-                            return True  # If successful, propagate the success back up
-                        Scr.sudoku_grid[row][col] = 0  # Revert the change on failure
-                        Scr.draw_grid(show)
-                return False  # If no number is valid, backtrack
-    return True  # If the end of the grid is reached, the puzzle is solved
+    empty_spaces = [(i, j) for i in range(9)
+                    for j in range(9) if Scr.sudoku_grid[i][j] == 0]
+
+    if not empty_spaces:
+        return True  # If the end of the grid is reached, the puzzle is solved
+
+    # apply MRV heuristic, select the cell with minimum remaining values
+    empty_spaces.sort(key=lambda x: len(
+        [num for num in range(1, 10) if is_valid(num, x[0], x[1], Scr)]))
+    row, col = empty_spaces[0]
+
+    # generate list of valid numbers for selected cell
+    valid_numbers = [num for num in range(
+        1, 10) if is_valid(num, row, col, Scr)]
+
+    # apply LCV heuristic, sort the numbers by the least constraining one
+    valid_numbers.sort(key=lambda num: len(
+        [is_valid(num, x[0], x[1], Scr) for x in empty_spaces[1:]]))
+
+    for num in valid_numbers:
+        Scr.sudoku_grid[row][col] = num  # Make the change
+        if forward_check(Scr, row, col) and solve(Scr, show):
+            return True  # If successful, propagate the success back up
+        Scr.sudoku_grid[row][col] = 0  # Revert the change on failure
+
+        # Handle Pygame events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        Scr.draw_grid(show)
+
+    return False  # If no number is valid, backtrack
 
 
 def forward_check(Scr: Screen, row, col):
@@ -71,7 +93,8 @@ def is_valid(num, row, col, Scr: Screen):
             if current_sum > cage.value:
                 return False
             # Check if this is the last cell to fill in the cage and the sum doesn't match the cage's value
-            empty_cells = sum(1 for cell in cells if Scr.sudoku_grid[cell[0]][cell[1]] == 0)
+            empty_cells = sum(
+                1 for cell in cells if Scr.sudoku_grid[cell[0]][cell[1]] == 0)
             if empty_cells == 1 and current_sum != cage.value:
                 return False
     return True

@@ -37,8 +37,6 @@ def solve(Scr: Screen, show):
                 pygame.quit()
                 quit()
 
-
-
     return False  # If no number is valid, backtrack
 
 

@@ -85,4 +85,3 @@ The Killer Sudoku Solver project is a Python application designed to solve Kille
 
 - Amin Reza Najafinia
 - Ali Alavizadeh
-- Paria Razavi
